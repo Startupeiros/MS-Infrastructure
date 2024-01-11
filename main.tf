@@ -9,7 +9,6 @@ terraform {
 
 provider "aws" {
   region  = "us-east-1"
-  profile = "default"
 }
 
 // Passo 01: Criar cluster ecs com configs do tipo FARGATE
