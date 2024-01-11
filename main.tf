@@ -34,7 +34,7 @@ resource "aws_ecs_cluster_capacity_providers" "cluster_configs" {
 
 // Passo 02: Criar task definition
 resource "aws_ecs_task_definition" "task_definition" {
-  family                   = "httpd-task-definition"
+  family                   = "products-task-definition"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512
@@ -44,14 +44,14 @@ resource "aws_ecs_task_definition" "task_definition" {
   container_definitions    = <<TASK_DEFINITION
 [
   {
-    "name": "httpd",
+    "name": "products",
     "portMappings": [
       {
         "containerPort": 80,
         "hostPort": 80
       }
     ],
-    "image": "httpd:latest",
+    "image": "107579490988.dkr.ecr.us-east-1.amazonaws.com/products:c7aadea8042c0052dcf4bf58c31dfc872d52a495",
     "cpu": 512,
     "memory": 1024,
     "essential": true
@@ -69,14 +69,14 @@ TASK_DEFINITION
 // Passo 03: Criar target group
 resource "aws_lb_target_group" "target-group" {
   target_type      = "ip"
-  name             = "httpd-target-group"
+  name             = "products-target-group"
   port             = 80
   protocol         = "HTTP"
   protocol_version = "HTTP1"
   vpc_id           = "vpc-056faf1cc54475650"
   health_check {
     enabled  = true
-    path     = "/"
+    path     = "/products/health"
     protocol = "HTTP"
     timeout  = 2
   }
@@ -108,8 +108,8 @@ resource "aws_lb_listener" "alb-listener" {
 }
 
 // Passo 05: Criar service
-resource "aws_ecs_service" "httpd" {
-  name        = "httpd-service"
+resource "aws_ecs_service" "products" {
+  name        = "products-service"
   cluster     = aws_ecs_cluster.cluster.id
   launch_type = "FARGATE"
 
@@ -125,7 +125,7 @@ resource "aws_ecs_service" "httpd" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target-group.arn
-    container_name   = "httpd"
+    container_name   = "products"
     container_port   = 80
   }
 
