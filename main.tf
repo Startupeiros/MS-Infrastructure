@@ -11,7 +11,7 @@ provider "aws" {
   region  = "us-east-1"
 }
 
-// Passo 01: Criar cluster ecs com configs do tipo FARGATE
+// Passo 01: Criar cluster ecs com configs do tipo FARGATE 
 resource "aws_ecs_cluster" "cluster" {
   name = "EckartCluster"
   setting {
