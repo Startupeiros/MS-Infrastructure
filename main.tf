@@ -241,6 +241,120 @@ resource "aws_ecs_task_definition" "task_definition-5" {
         "hostPort": 80
       }
     ],
+    "environment": [
+      {
+        "name": "APP_NAME",
+        "value": "ms-tech-challenge-order"
+      },
+      {
+        "name": "APP_ENV",
+        "value": "local"
+      },
+      {
+        "name": "APP_KEY",
+        "value": "base64:RwTLuAfyiUw+ChuING4gtmWvK9jz3QyB4V5AKiVsPdg="
+      },
+      {
+        "name": "APP_DEBUG",
+        "value": "true"
+      },
+      {
+        "name": "APP_PORT",
+        "value": "80"
+      },
+      {
+        "name": "LOG_CHANNEL",
+        "value": "stack"
+      },
+      {
+        "name": "LOG_DEPRECATIONS_CHANNEL",
+        "value": "null"
+      },
+      {
+        "name": "LOG_LEVEL",
+        "value": "debug"
+      },
+      {
+        "name": "DB_CONNECTION",
+        "value": "pgsql"
+      },
+      {
+        "name": "DB_HOST",
+        "value": "orders.crcmgu8oq64k.us-east-1.rds.amazonaws.com"
+      },
+      {
+        "name": "DB_PORT",
+        "value": "5432"
+      },
+      {
+        "name": "DB_DATABASE",
+        "value": "orders"
+      },
+      {
+        "name": "DB_USERNAME",
+        "value": "postgres"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "value": "awspostgres"
+      },
+      {
+        "name": "RABBITMQ_HOST",
+        "value": "fish-01.rmq.cloudamqp.com"
+      },
+      {
+        "name": "RABBITMQ_VHOST",
+        "value": "twlvsbxr"
+      },
+      {
+        "name": "RABBITMQ_PORT",
+        "value": "5672"
+      },
+      {
+        "name": "RABBITMQ_USER",
+        "value": "twlvsbxr"
+      },
+      {
+        "name": "RABBITMQ_PASS",
+        "value": "vbeQt4hymocx2OG3lCzR4t6qI0OTRjKA"
+      },
+      {
+        "name": "RABBITMQ_DEFAULT_KEY",
+        "value": "key_default"
+      },
+      {
+        "name": "RABBITMQ_AWAITING_PAYMENT_ORDER_QUEUE",
+        "value": "queue_pedido_aguardando_pagamento_1"
+      },
+      {
+        "name": "RABBITMQ_AWAITING_PAYMENT_ORDER_EXCHANGE",
+        "value": "exchange_pedido_aguardando_pagamento"
+      },
+      {
+        "name": "RABBITMQ_CANCEL_ORDER_QUEUE",
+        "value": "queue_pedido_cancelado_2"
+      },
+      {
+        "name": "RABBITMQ_PAID_ORDER_QUEUE",
+        "value": "queue_pedido_pago_2"
+      },
+      {
+        "name": "RABBITMQ_PREPARE_ORDER_QUEUE",
+        "value": "queue_pedido_preparo_1"
+      },
+      {
+        "name": "RABBITMQ_PREPARE_ORDER_EXCHANGE",
+        "value": "exchange_pedido_preparo"
+      },
+      {
+        "name": "RABBITMQ_READY_ORDER_QUEUE",
+        "value": "queue_pedido_pronto_1"
+      },
+      {
+        "name": "RABBITMQ_READY_ORDER_EXCHANGE",
+        "value": "exchange_pedido_pronto"
+      }
+    ],
     "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -335,7 +449,7 @@ resource "aws_lb_target_group" "target-group-5" {
   vpc_id           = "vpc-0ace3eaa68d9a3dde"
   health_check {
     enabled  = true
-    path     = "/orders/health"
+    path     = "/api/health"
     protocol = "HTTP"
     timeout  = 2
   }
@@ -436,7 +550,7 @@ resource "aws_lb_listener_rule" "rule-orders" {
 
   condition {
     path_pattern {
-      values = ["/orders/*"]
+      values = ["/api/*"]
     }
   }
 }
